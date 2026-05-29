@@ -7,6 +7,9 @@ public class DriveCar : MonoBehaviour
     [SerializeField] private float acceleration = 12f;
     [SerializeField] private float friction = 4f;
     [SerializeField] private float turnSpeed = 120f;
+    [SerializeField] private float turnMagnitude = 1.2f;
+    [SerializeField, Range(0f, 1f)] private float highSpeedTurnMultiplier = 0.25f;
+    [SerializeField] private float minimumSteerSpeed = 0.05f;
 
     private float currentSpeed;
 
@@ -51,7 +54,14 @@ public class DriveCar : MonoBehaviour
 
         currentSpeed = Mathf.Clamp(currentSpeed, -maxReverseSpeed, maxForwardSpeed);
 
-        transform.Rotate(0f, turnInput * turnSpeed * Time.deltaTime, 0f);
+        float speedAbs = Mathf.Abs(currentSpeed);
+        float directionalMaxSpeed = currentSpeed >= 0f ? maxForwardSpeed : maxReverseSpeed;
+        float normalizedSpeed = directionalMaxSpeed > 0f ? Mathf.Clamp01(speedAbs / directionalMaxSpeed) : 0f;
+        float speedScaledTurnMagnitude = speedAbs < minimumSteerSpeed
+            ? 0f
+            : Mathf.Lerp(turnMagnitude, turnMagnitude * highSpeedTurnMultiplier, normalizedSpeed);
+
+        transform.Rotate(0f, turnInput * turnSpeed * speedScaledTurnMagnitude * Time.deltaTime, 0f);
         transform.Translate(Vector3.right * currentSpeed * Time.deltaTime, Space.Self);
     }
 }
