@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DriveCar : MonoBehaviour
 {
@@ -11,10 +12,33 @@ public class DriveCar : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float highSpeedTurnMultiplier = 0.25f;
     [SerializeField] private float minimumSteerSpeed = 0.05f;
 
+    [Header("Recovery")]
+    [SerializeField, Tooltip("Dot product of car-up vs world-up below which the car is considered flipped.")]
+    private float flippedThreshold = 0.1f;
+    [SerializeField, Tooltip("Height added above ground when righting the car, to prevent clipping.")]
+    private float flipRightingNudge = 0.5f;
+
     private float currentSpeed;
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+        }
+
+        bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
+
+        if (isFlipped && Input.GetKeyDown(KeyCode.Q))
+        {
+            float yaw = transform.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+            transform.position += Vector3.up * flipRightingNudge;
+            currentSpeed = 0f;
+            return;
+        }
+
         float throttleInput = 0f;
         float turnInput = 0f;
 
