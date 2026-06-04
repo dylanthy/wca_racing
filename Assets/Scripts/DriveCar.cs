@@ -20,6 +20,11 @@ public class DriveCar : MonoBehaviour
 
     private float currentSpeed;
 
+    void Start()
+    {
+        ApplySelectedCarStats();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -87,5 +92,24 @@ public class DriveCar : MonoBehaviour
 
         transform.Rotate(0f, turnInput * turnSpeed * speedScaledTurnMagnitude * Time.deltaTime, 0f);
         transform.Translate(Vector3.right * currentSpeed * Time.deltaTime, Space.Self);
+    }
+
+    private void ApplySelectedCarStats()
+    {
+        CarDefinition selectedCar = CarSelectionRuntime.SelectedCar;
+        if (selectedCar == null || selectedCar.driveStats == null)
+        {
+            return;
+        }
+
+        CarDriveStats stats = selectedCar.driveStats;
+        maxForwardSpeed = stats.maxForwardSpeed;
+        maxReverseSpeed = stats.maxReverseSpeed;
+        acceleration = stats.acceleration;
+        friction = stats.friction;
+        turnSpeed = stats.turnSpeed;
+        turnMagnitude = stats.turnMagnitude;
+        highSpeedTurnMultiplier = stats.highSpeedTurnMultiplier;
+        minimumSteerSpeed = stats.minimumSteerSpeed;
     }
 }
