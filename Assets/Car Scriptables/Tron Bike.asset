@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd5c22ad268944c6f92dce58b4deca75, type: 3}
-  m_Name: Car2
+  m_Name: Tron Bike
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
-  carName: Golden Box
-  creator: Mr. Dylan
-  previewPrefab: {fileID: 2970724135546557505, guid: 507019fff73f947d1b489677547ae546, type: 3}
+  carName: Tron Bike
+  creator: Ryan B.
+  previewPrefab: {fileID: 6050745500348086564, guid: 92c2ea845f6c0854eb3e000716b8f1a3, type: 3}
   driveStats:
-    maxForwardSpeed: 500
-    maxReverseSpeed: 20
-    acceleration: 15
-    friction: 10
+    maxForwardSpeed: 75
+    maxReverseSpeed: 10
+    acceleration: 35
+    friction: 1
     turnSpeed: 60
     turnMagnitude: 3
     highSpeedTurnMultiplier: 0.25

@@ -102,7 +102,6 @@ public class CarSelectScreenController : MonoBehaviour
         }
 
         gameStarted = true;
-
         CarDefinition currentCar = cars[currentIndex];
         CarSelectionRuntime.SetSelection(currentCar, currentIndex);
 
@@ -112,7 +111,6 @@ public class CarSelectScreenController : MonoBehaviour
         {
             StopCoroutine(transitionRoutine);
         }
-
         transitionRoutine = StartCoroutine(TransitionToGameplayCamera());
     }
 
@@ -149,6 +147,7 @@ public class CarSelectScreenController : MonoBehaviour
         cameraTransform.position = targetPosition;
         cameraTransform.rotation = targetRotation;
         gameplayCameraFollow.enabled = true;
+        gameObject.SetActive(false);
     }
 
     private void UpdateSelectionCameraOrbit()
@@ -272,8 +271,8 @@ public class CarSelectScreenController : MonoBehaviour
         Transform anchor = previewAnchor != null ? previewAnchor : transform;
         previewInstance = Instantiate(car.previewPrefab, anchor);
         previewInstance.transform.localPosition = Vector3.zero;
-        previewInstance.transform.localRotation = Quaternion.identity;
-        previewInstance.transform.localScale = Vector3.one;
+        //previewInstance.transform.localRotation = Quaternion.identity;
+        //previewInstance.transform.localScale = Vector3.one;
 
         SetDriveScriptsEnabled(previewInstance, false);
     }
