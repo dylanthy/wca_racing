@@ -30,6 +30,65 @@ public class CarCameraFollow : MonoBehaviour
     private Vector3 positionVelocity;
     private Vector3 lastPlanarForward = Vector3.forward;
 
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        if (target == null)
+        {
+            return;
+        }
+
+        Vector3 rawForward = targetForwardAxis == ForwardAxis.Forward ? target.forward : target.right;
+        Vector3 planarForward = Vector3.ProjectOnPlane(rawForward, Vector3.up);
+        if (planarForward.sqrMagnitude > 0.0001f)
+        {
+            lastPlanarForward = planarForward.normalized;
+        }
+    }
+
+    public bool TryGetDesiredPose(out Vector3 desiredPosition, out Quaternion desiredRotation)
+    {
+        desiredPosition = transform.position;
+        desiredRotation = transform.rotation;
+
+        if (target == null)
+        {
+            return false;
+        }
+
+        Vector3 rawForward = targetForwardAxis == ForwardAxis.Forward ? target.forward : target.right;
+        Vector3 planarForward = Vector3.ProjectOnPlane(rawForward, Vector3.up);
+        if (planarForward.sqrMagnitude > 0.0001f)
+        {
+            lastPlanarForward = planarForward.normalized;
+        }
+
+        desiredPosition = target.position
+            + Vector3.up * height
+            - lastPlanarForward * distance
+            + Vector3.Cross(Vector3.up, lastPlanarForward) * sideOffset;
+
+        Vector3 lookPoint = target.position + Vector3.up * lookAtHeight + lastPlanarForward * lookAhead;
+        Vector3 lookDirection = lookPoint - desiredPosition;
+        if (lookDirection.sqrMagnitude > 0.0001f)
+        {
+            desiredRotation = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
+        }
+
+        return true;
+    }
+
+    public void SnapToTargetPose()
+    {
+        if (!TryGetDesiredPose(out Vector3 desiredPosition, out Quaternion desiredRotation))
+        {
+            return;
+        }
+
+        transform.position = desiredPosition;
+        transform.rotation = desiredRotation;
+    }
+
     void LateUpdate()
     {
         if (target == null)

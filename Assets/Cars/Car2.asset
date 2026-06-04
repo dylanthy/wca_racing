@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5c22ad268944c6f92dce58b4deca75, type: 3}
+  m_Name: Car2
+  m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
+  carName: Golden Box
+  creator: Mr. Dylan
+  previewPrefab: {fileID: 2970724135546557505, guid: 507019fff73f947d1b489677547ae546, type: 3}
+  driveStats:
+    maxForwardSpeed: 500
+    maxReverseSpeed: 20
+    acceleration: 15
+    friction: 10
+    turnSpeed: 60
+    turnMagnitude: 3
+    highSpeedTurnMultiplier: 0.25
+    minimumSteerSpeed: 0.05
+  customStats: []
