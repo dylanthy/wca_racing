@@ -16,8 +16,10 @@ public class DriveCar : MonoBehaviour
     [Header("Recovery")]
     [SerializeField, Tooltip("Dot product of car-up vs world-up below which the car is considered flipped.")]
     private float flippedThreshold = 0.1f;
-    [SerializeField, Tooltip("Height added above ground when righting the car, to prevent clipping.")]
-    private float flipRightingNudge = 0.5f;
+    [SerializeField, Tooltip("Roll torque applied by A/D while flipped and grounded.")]
+    private float twistRecoveryTorque = 75f;
+    [SerializeField, Tooltip("Angular damping used while applying twist recovery.")]
+    private float twistRecoveryAngularDamping = 2.5f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckPadding = 0.15f;
@@ -42,7 +44,6 @@ public class DriveCar : MonoBehaviour
     private float currentSpeed;
     private float throttleInput;
     private float turnInput;
-    private bool flipRequested;
 
     private Collider carCollider;
     private Rigidbody carRigidbody;
@@ -94,10 +95,6 @@ public class DriveCar : MonoBehaviour
             turnInput += 1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            flipRequested = true;
-        }
     }
 
     void FixedUpdate()
@@ -107,20 +104,21 @@ public class DriveCar : MonoBehaviour
         bool justLanded = isGrounded && !wasGrounded;
         bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
 
-        if (flipRequested)
+        if (isGrounded && isFlipped)
         {
-            flipRequested = false;
+            // While tipped over, A/D is repurposed from steering to roll-twist recovery.
+            carRigidbody.angularDamping = twistRecoveryAngularDamping;
+            currentSpeed = 0f;
 
-            if (isGrounded && isFlipped)
+            if (!Mathf.Approximately(turnInput, 0f))
             {
-                float yaw = transform.eulerAngles.y;
-                carRigidbody.position += Vector3.up * flipRightingNudge;
-                carRigidbody.rotation = Quaternion.Euler(0f, yaw, 0f);
-                carRigidbody.linearVelocity = Vector3.zero;
-                carRigidbody.angularVelocity = Vector3.zero;
-                currentSpeed = 0f;
-                return;
+                float twistSign = Mathf.Sign(turnInput);
+                Vector3 twistAxis = transform.forward;
+                carRigidbody.AddTorque(twistAxis * -twistSign * twistRecoveryTorque, ForceMode.Acceleration);
             }
+
+            wasGrounded = true;
+            return;
         }
 
         if (!isGrounded)
