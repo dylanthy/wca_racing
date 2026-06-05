@@ -26,6 +26,16 @@ public class DriveCar : MonoBehaviour
     [Header("Airborne")]
     [SerializeField, Tooltip("How quickly stored drive speed is lost while the car is airborne.")]
     private float airborneSpeedDecay = 8f;
+    [SerializeField, Tooltip("Yaw control strength while airborne.")]
+    private float airborneYawTorque = 25f;
+    [SerializeField, Tooltip("Pitch control strength while airborne. W pitches nose down, S pitches nose up.")]
+    private float airbornePitchTorque = 20f;
+    [SerializeField, Tooltip("Roll control strength while airborne. A rolls left, D rolls right.")]
+    private float airborneRollTorque = 15f;
+    [SerializeField, Tooltip("How quickly airborne spin settles. Lower values keep momentum longer.")]
+    private float airborneAngularDamping = 0.35f;
+    [SerializeField, Tooltip("How much on-ground steering spin is preserved when taking off.")]
+    private float takeoffSpinTransfer = 0.9f;
 
     private float currentSpeed;
     private float throttleInput;
@@ -34,12 +44,16 @@ public class DriveCar : MonoBehaviour
 
     private Collider carCollider;
     private Rigidbody carRigidbody;
+    private float defaultAngularDamping;
+    private bool wasGrounded;
+    private float lastGroundYawRateDeg;
 
     void Awake()
     {
         carCollider = GetComponent<Collider>();
         carRigidbody = GetComponent<Rigidbody>();
         carRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        defaultAngularDamping = carRigidbody.angularDamping;
     }
 
     void Start()
@@ -107,9 +121,21 @@ public class DriveCar : MonoBehaviour
 
         if (!isGrounded)
         {
+            if (wasGrounded)
+            {
+                float takeoffYawRateRad = lastGroundYawRateDeg * Mathf.Deg2Rad * takeoffSpinTransfer;
+                carRigidbody.angularVelocity += transform.up * takeoffYawRateRad;
+            }
+
+            carRigidbody.angularDamping = airborneAngularDamping;
+            ApplyAirborneRotationControl();
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, airborneSpeedDecay * Time.fixedDeltaTime);
+            wasGrounded = false;
             return;
         }
+
+        wasGrounded = true;
+        carRigidbody.angularDamping = defaultAngularDamping;
 
         if (throttleInput != 0f)
         {
@@ -128,6 +154,7 @@ public class DriveCar : MonoBehaviour
         float speedScaledTurnMagnitude = speedAbs < minimumSteerSpeed
             ? 0f
             : Mathf.Lerp(turnMagnitude, turnMagnitude * highSpeedTurnMultiplier, normalizedSpeed);
+        lastGroundYawRateDeg = turnInput * turnSpeed * speedScaledTurnMagnitude;
 
         float yawDelta = turnInput * turnSpeed * speedScaledTurnMagnitude * Time.fixedDeltaTime;
         Quaternion targetRotation = carRigidbody.rotation;
@@ -149,6 +176,20 @@ public class DriveCar : MonoBehaviour
         Vector3 groundAlignedVelocity = driveDirection * currentSpeed;
         Vector3 groundNormalVelocity = Vector3.Project(carRigidbody.linearVelocity, groundHit.normal);
         carRigidbody.linearVelocity = groundAlignedVelocity + groundNormalVelocity;
+    }
+
+    private void ApplyAirborneRotationControl()
+    {
+        float yawControl = turnInput * airborneYawTorque;
+        float pitchControl = -throttleInput * airbornePitchTorque;
+        float rollControl = turnInput * airborneRollTorque;
+
+        Vector3 controlTorque =
+            transform.up * yawControl +
+            transform.right * pitchControl +
+            transform.forward * rollControl;
+
+        carRigidbody.AddTorque(controlTorque, ForceMode.Acceleration);
     }
 
     private bool TryGetGroundHit(out RaycastHit hit)
