@@ -524,7 +524,7 @@ RectTransform:
   - {fileID: 1280607362}
   - {fileID: 543628912}
   - {fileID: 181779036}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1363375390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -820,13 +820,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarCameraFollow
   target: {fileID: 0}
   targetForwardAxis: 1
-  distance: 6
-  height: 3
+  distance: 13.31
+  height: 7.94
   sideOffset: 0
-  lookAhead: 1.5
+  lookAhead: 30.9
   positionSmoothTime: 0.12
   rotationSharpness: 10
-  lookAtHeight: 1.2
+  lookAtHeight: -0.3
 --- !u!1 &456533459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,7 +1003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1.3500061}
+  m_AnchoredPosition: {x: 0, y: -1.3499756}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &543628913
@@ -1689,6 +1689,7 @@ Transform:
   - {fileID: 354533038}
   - {fileID: 1758167630}
   - {fileID: 673145650}
+  - {fileID: 263610573}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1458279478
@@ -3775,6 +3776,5 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 263610573}
   - {fileID: 104266180}
   - {fileID: 1363375390}

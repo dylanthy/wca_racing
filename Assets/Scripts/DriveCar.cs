@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class DriveCar : MonoBehaviour
 {
     [SerializeField] private float maxForwardSpeed = 8f;
@@ -18,7 +19,28 @@ public class DriveCar : MonoBehaviour
     [SerializeField, Tooltip("Height added above ground when righting the car, to prevent clipping.")]
     private float flipRightingNudge = 0.5f;
 
+    [Header("Ground Check")]
+    [SerializeField] private float groundCheckPadding = 0.15f;
+    [SerializeField] private LayerMask groundLayers = ~0;
+
+    [Header("Airborne")]
+    [SerializeField, Tooltip("How quickly stored drive speed is lost while the car is airborne.")]
+    private float airborneSpeedDecay = 8f;
+
     private float currentSpeed;
+    private float throttleInput;
+    private float turnInput;
+    private bool flipRequested;
+
+    private Collider carCollider;
+    private Rigidbody carRigidbody;
+
+    void Awake()
+    {
+        carCollider = GetComponent<Collider>();
+        carRigidbody = GetComponent<Rigidbody>();
+        carRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+    }
 
     void Start()
     {
@@ -33,19 +55,8 @@ public class DriveCar : MonoBehaviour
             return;
         }
 
-        bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
-
-        if (isFlipped && Input.GetKeyDown(KeyCode.Q))
-        {
-            float yaw = transform.eulerAngles.y;
-            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-            transform.position += Vector3.up * flipRightingNudge;
-            currentSpeed = 0f;
-            return;
-        }
-
-        float throttleInput = 0f;
-        float turnInput = 0f;
+        throttleInput = 0f;
+        turnInput = 0f;
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -67,18 +78,46 @@ public class DriveCar : MonoBehaviour
             turnInput += 1f;
         }
 
-        if (throttleInput > 0f)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            currentSpeed += acceleration * throttleInput * Time.deltaTime;
+            flipRequested = true;
         }
-        else if (throttleInput < 0f)
+    }
+
+    void FixedUpdate()
+    {
+        bool isGrounded = TryGetGroundHit(out RaycastHit groundHit);
+        bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
+
+        if (flipRequested)
         {
-            currentSpeed += acceleration * throttleInput * Time.deltaTime;
+            flipRequested = false;
+
+            if (isGrounded && isFlipped)
+            {
+                float yaw = transform.eulerAngles.y;
+                carRigidbody.position += Vector3.up * flipRightingNudge;
+                carRigidbody.rotation = Quaternion.Euler(0f, yaw, 0f);
+                carRigidbody.linearVelocity = Vector3.zero;
+                carRigidbody.angularVelocity = Vector3.zero;
+                currentSpeed = 0f;
+                return;
+            }
+        }
+
+        if (!isGrounded)
+        {
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, airborneSpeedDecay * Time.fixedDeltaTime);
+            return;
+        }
+
+        if (throttleInput != 0f)
+        {
+            currentSpeed += acceleration * throttleInput * Time.fixedDeltaTime;
         }
         else
         {
-            // Apply friction when no throttle is pressed so the car coasts, then slows to a stop.
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, friction * Time.deltaTime);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, friction * Time.fixedDeltaTime);
         }
 
         currentSpeed = Mathf.Clamp(currentSpeed, -maxReverseSpeed, maxForwardSpeed);
@@ -90,8 +129,38 @@ public class DriveCar : MonoBehaviour
             ? 0f
             : Mathf.Lerp(turnMagnitude, turnMagnitude * highSpeedTurnMultiplier, normalizedSpeed);
 
-        transform.Rotate(0f, turnInput * turnSpeed * speedScaledTurnMagnitude * Time.deltaTime, 0f);
-        transform.Translate(Vector3.right * currentSpeed * Time.deltaTime, Space.Self);
+        float yawDelta = turnInput * turnSpeed * speedScaledTurnMagnitude * Time.fixedDeltaTime;
+        Quaternion targetRotation = carRigidbody.rotation;
+
+        if (!Mathf.Approximately(yawDelta, 0f))
+        {
+            targetRotation = carRigidbody.rotation * Quaternion.Euler(0f, yawDelta, 0f);
+            carRigidbody.MoveRotation(targetRotation);
+        }
+
+        Vector3 driveDirection = Vector3.ProjectOnPlane(targetRotation * Vector3.right, groundHit.normal);
+        if (driveDirection.sqrMagnitude < 0.0001f)
+        {
+            driveDirection = Vector3.ProjectOnPlane(targetRotation * Vector3.right, Vector3.up);
+        }
+
+        driveDirection.Normalize();
+
+        Vector3 groundAlignedVelocity = driveDirection * currentSpeed;
+        Vector3 groundNormalVelocity = Vector3.Project(carRigidbody.linearVelocity, groundHit.normal);
+        carRigidbody.linearVelocity = groundAlignedVelocity + groundNormalVelocity;
+    }
+
+    private bool TryGetGroundHit(out RaycastHit hit)
+    {
+        Bounds bounds = carCollider.bounds;
+        return Physics.Raycast(
+            bounds.center,
+            Vector3.down,
+            out hit,
+            bounds.extents.y + groundCheckPadding,
+            groundLayers,
+            QueryTriggerInteraction.Ignore);
     }
 
     private void ApplySelectedCarStats()

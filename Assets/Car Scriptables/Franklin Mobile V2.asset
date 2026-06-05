@@ -18,7 +18,7 @@ MonoBehaviour:
   driveStats:
     maxForwardSpeed: 75
     maxReverseSpeed: 10
-    acceleration: 20
+    acceleration: 100
     friction: 4
     turnSpeed: 60
     turnMagnitude: 3

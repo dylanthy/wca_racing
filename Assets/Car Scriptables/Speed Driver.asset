@@ -16,12 +16,12 @@ MonoBehaviour:
   creator: Riley the Cool
   previewPrefab: {fileID: 301678952128574392, guid: 89f9314a226c1ca459e14c98f5817c24, type: 3}
   driveStats:
-    maxForwardSpeed: 100
-    maxReverseSpeed: 500
-    acceleration: 100
-    friction: 50
-    turnSpeed: 60
-    turnMagnitude: 3
-    highSpeedTurnMultiplier: 0.25
+    maxForwardSpeed: 20
+    maxReverseSpeed: 5
+    acceleration: 5
+    friction: 2
+    turnSpeed: 3
+    turnMagnitude: 20
+    highSpeedTurnMultiplier: 0.63
     minimumSteerSpeed: 0.05
   customStats: []
