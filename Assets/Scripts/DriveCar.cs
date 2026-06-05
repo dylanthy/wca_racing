@@ -36,6 +36,8 @@ public class DriveCar : MonoBehaviour
     private float airborneAngularDamping = 0.35f;
     [SerializeField, Tooltip("How much on-ground steering spin is preserved when taking off.")]
     private float takeoffSpinTransfer = 0.9f;
+    [SerializeField, Tooltip("If enabled, player can steer/tilt while airborne. Leave off to ignore input in air.")]
+    private bool allowAirControl;
 
     private float currentSpeed;
     private float throttleInput;
@@ -125,11 +127,17 @@ public class DriveCar : MonoBehaviour
             {
                 float takeoffYawRateRad = lastGroundYawRateDeg * Mathf.Deg2Rad * takeoffSpinTransfer;
                 carRigidbody.angularVelocity += transform.up * takeoffYawRateRad;
+
+                // Drop all translational momentum at takeoff while keeping rotational motion in the air.
+                currentSpeed = 0f;
+                carRigidbody.linearVelocity = Vector3.zero;
             }
 
             carRigidbody.angularDamping = airborneAngularDamping;
-            ApplyAirborneRotationControl();
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, airborneSpeedDecay * Time.fixedDeltaTime);
+            if (allowAirControl)
+            {
+                ApplyAirborneRotationControl();
+            }
             wasGrounded = false;
             return;
         }
