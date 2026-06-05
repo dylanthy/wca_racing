@@ -103,6 +103,8 @@ public class DriveCar : MonoBehaviour
     void FixedUpdate()
     {
         bool isGrounded = TryGetGroundHit(out RaycastHit groundHit);
+        bool justTookOff = !isGrounded && wasGrounded;
+        bool justLanded = isGrounded && !wasGrounded;
         bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
 
         if (flipRequested)
@@ -123,14 +125,13 @@ public class DriveCar : MonoBehaviour
 
         if (!isGrounded)
         {
-            if (wasGrounded)
+            if (justTookOff)
             {
                 float takeoffYawRateRad = lastGroundYawRateDeg * Mathf.Deg2Rad * takeoffSpinTransfer;
                 carRigidbody.angularVelocity += transform.up * takeoffYawRateRad;
 
-                // Drop all translational momentum at takeoff while keeping rotational motion in the air.
+                // Clear drive-speed memory at takeoff, but keep rigidbody velocity for true ballistic jumps.
                 currentSpeed = 0f;
-                carRigidbody.linearVelocity = Vector3.zero;
             }
 
             carRigidbody.angularDamping = airborneAngularDamping;
@@ -140,6 +141,20 @@ public class DriveCar : MonoBehaviour
             }
             wasGrounded = false;
             return;
+        }
+
+        Vector3 driveDirectionFromRotation = Vector3.ProjectOnPlane(carRigidbody.rotation * Vector3.right, groundHit.normal);
+        if (driveDirectionFromRotation.sqrMagnitude < 0.0001f)
+        {
+            driveDirectionFromRotation = Vector3.ProjectOnPlane(carRigidbody.rotation * Vector3.right, Vector3.up);
+        }
+
+        driveDirectionFromRotation.Normalize();
+
+        if (justLanded)
+        {
+            // Re-sync drive speed to actual landing velocity so landing feels continuous but not boosted.
+            currentSpeed = Vector3.Dot(carRigidbody.linearVelocity, driveDirectionFromRotation);
         }
 
         wasGrounded = true;
