@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5847844563098998706}
@@ -56,7 +56,19 @@ MonoBehaviour:
   highSpeedTurnMultiplier: 0.25
   minimumSteerSpeed: 0.05
   flippedThreshold: 0.1
-  flipRightingNudge: 0.5
+  twistRecoveryTorque: 75
+  twistRecoveryAngularDamping: 2.5
+  groundCheckPadding: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  airborneSpeedDecay: 8
+  airborneYawTorque: 25
+  airbornePitchTorque: 20
+  airborneRollTorque: 15
+  airborneAngularDamping: 0.35
+  takeoffSpinTransfer: 0.9
+  allowAirControl: 0
 --- !u!65 &6039105609002270975
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76,8 +88,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.0994104, z: 1}
-  m_Center: {x: 0, y: 0.49907345, z: 0}
+  m_Size: {x: 0.99999964, y: 0.15314128, z: 0.99999964}
+  m_Center: {x: 0, y: 0.23588979, z: -0}
 --- !u!54 &2297595756227303685
 Rigidbody:
   m_ObjectHideFlags: 0

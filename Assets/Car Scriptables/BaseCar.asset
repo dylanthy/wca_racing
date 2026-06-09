@@ -17,11 +17,11 @@ MonoBehaviour:
   previewPrefab: {fileID: 9211798204576030354, guid: dd4d60cc7b78d234db53c1423cc9e809, type: 3}
   driveStats:
     maxForwardSpeed: 50
-    maxReverseSpeed: 10
-    acceleration: 10
+    maxReverseSpeed: 20
+    acceleration: 7
     friction: 5
-    turnSpeed: 60
+    turnSpeed: 30
     turnMagnitude: 3
-    highSpeedTurnMultiplier: 0.25
-    minimumSteerSpeed: 0.05
+    highSpeedTurnMultiplier: 0.099
+    minimumSteerSpeed: 0.3
   customStats: []

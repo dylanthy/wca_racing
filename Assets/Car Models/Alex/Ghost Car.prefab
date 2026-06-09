@@ -370,6 +370,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7341498669372098932}
   - component: {fileID: 705744433775806266}
+  - component: {fileID: 7645827951467008011}
+  - component: {fileID: 1903705235213282402}
   m_Layer: 0
   m_Name: Ghost Car
   m_TagString: Untagged
@@ -429,7 +431,67 @@ MonoBehaviour:
   highSpeedTurnMultiplier: 0.25
   minimumSteerSpeed: 0.05
   flippedThreshold: 0.1
-  flipRightingNudge: 0.5
+  twistRecoveryTorque: 75
+  twistRecoveryAngularDamping: 2.5
+  groundCheckPadding: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  airborneSpeedDecay: 8
+  airborneYawTorque: 25
+  airbornePitchTorque: 20
+  airborneRollTorque: 15
+  airborneAngularDamping: 0.35
+  takeoffSpinTransfer: 0.9
+  allowAirControl: 0
+--- !u!65 &7645827951467008011
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3070896684218725091}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 81.570854, y: 12.421925, z: 77.12987}
+  m_Center: {x: -5.5567713, y: 6.8344684, z: 3.581819}
+--- !u!54 &1903705235213282402
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3070896684218725091}
+  serializedVersion: 5
+  m_Mass: 55
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3255216624496883769
 GameObject:
   m_ObjectHideFlags: 0

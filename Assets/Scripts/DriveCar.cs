@@ -102,20 +102,20 @@ public class DriveCar : MonoBehaviour
         bool isGrounded = TryGetGroundHit(out RaycastHit groundHit);
         bool justTookOff = !isGrounded && wasGrounded;
         bool justLanded = isGrounded && !wasGrounded;
-        bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
-
+        //bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < flippedThreshold;
+        bool isFlipped = false;
         if (isGrounded && isFlipped)
         {
             // While tipped over, A/D is repurposed from steering to roll-twist recovery.
             carRigidbody.angularDamping = twistRecoveryAngularDamping;
             currentSpeed = 0f;
 
-            if (!Mathf.Approximately(turnInput, 0f))
-            {
-                float twistSign = Mathf.Sign(turnInput);
-                Vector3 twistAxis = transform.forward;
-                carRigidbody.AddTorque(twistAxis * -twistSign * twistRecoveryTorque, ForceMode.Acceleration);
-            }
+            // if (!Mathf.Approximately(turnInput, 0f))
+            // {
+            //     float twistSign = Mathf.Sign(turnInput);
+            //     Vector3 twistAxis = transform.forward;
+            //     carRigidbody.AddTorque(twistAxis * -twistSign * twistRecoveryTorque, ForceMode.Acceleration);
+            // }
 
             wasGrounded = true;
             return;

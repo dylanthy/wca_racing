@@ -591,6 +591,17 @@ MonoBehaviour:
   minimumSteerSpeed: 0.05
   flippedThreshold: 0.1
   flipRightingNudge: 0.5
+  groundCheckPadding: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  airborneSpeedDecay: 8
+  airborneYawTorque: 25
+  airbornePitchTorque: 20
+  airborneRollTorque: 15
+  airborneAngularDamping: 0.35
+  takeoffSpinTransfer: 0.9
+  allowAirControl: 0
 --- !u!54 &7893375378177088931
 Rigidbody:
   m_ObjectHideFlags: 0
