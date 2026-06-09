@@ -41,6 +41,8 @@ public class DriveCar : MonoBehaviour
     [SerializeField, Tooltip("If enabled, player can steer/tilt while airborne. Leave off to ignore input in air.")]
     private bool allowAirControl;
 
+    private const float GlobalResetY = -30f;
+
     private float currentSpeed;
     private float throttleInput;
     private float turnInput;
@@ -68,7 +70,13 @@ public class DriveCar : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            ReloadCurrentScene();
+            return;
+        }
+
+        if (transform.position.y < GlobalResetY)
+        {
+            ReloadCurrentScene();
             return;
         }
 
@@ -242,5 +250,10 @@ public class DriveCar : MonoBehaviour
         turnMagnitude = stats.turnMagnitude;
         highSpeedTurnMultiplier = stats.highSpeedTurnMultiplier;
         minimumSteerSpeed = stats.minimumSteerSpeed;
+    }
+
+    private void ReloadCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

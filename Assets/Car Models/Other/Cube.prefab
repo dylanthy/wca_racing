@@ -590,7 +590,8 @@ MonoBehaviour:
   highSpeedTurnMultiplier: 0.25
   minimumSteerSpeed: 0.05
   flippedThreshold: 0.1
-  flipRightingNudge: 0.5
+  twistRecoveryTorque: 75
+  twistRecoveryAngularDamping: 2.5
   groundCheckPadding: 0.15
   groundLayers:
     serializedVersion: 2
@@ -610,7 +611,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9211798204576030354}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.01
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

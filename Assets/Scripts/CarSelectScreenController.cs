@@ -3,6 +3,7 @@ using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class CarSelectScreenController : MonoBehaviour
 {
@@ -25,7 +26,10 @@ public class CarSelectScreenController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI carNameText;
     [SerializeField] private TextMeshProUGUI creatorText;
-    [SerializeField] private TextMeshProUGUI statsText;
+    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private TextMeshProUGUI handlingText;
+    [SerializeField] private TextMeshProUGUI driftText;
+    [SerializeField] private TextMeshProUGUI frictionText;
 
     [Header("Gameplay Transition")]
     [SerializeField] private CarCameraFollow gameplayCameraFollow;
@@ -212,20 +216,12 @@ public class CarSelectScreenController : MonoBehaviour
 
     private void UpdateUi(CarDefinition car)
     {
-        if (carNameText != null)
-        {
-            carNameText.text = car != null ? car.carName : "No Car";
-        }
-
-        if (creatorText != null)
-        {
-            creatorText.text = car != null ? "Creator: " + car.creator : string.Empty;
-        }
-
-        if (statsText != null)
-        {
-            statsText.text = BuildStatsText(car);
-        }
+        carNameText.text = car != null ? car.carName : "No Car";
+        creatorText.text = car != null ? "Creator: " + car.creator : string.Empty;
+        speedText.text = car != null ? "Top Speed: " + car.driveStats.maxForwardSpeed.ToString("0.0") : string.Empty;
+        handlingText.text = car != null ? "Handling: "+car.driveStats.turnMagnitude.ToString("0.0") : string.Empty;
+        driftText.text = car != null ? "Drifting: "+car.driveStats.highSpeedTurnMultiplier.ToString("0.0") : string.Empty;
+        frictionText.text = car != null ? "Friction: "+car.driveStats.friction.ToString("0.0") : string.Empty;
     }
 
     private string BuildStatsText(CarDefinition car)
@@ -287,11 +283,6 @@ public class CarSelectScreenController : MonoBehaviour
         if (creatorText != null)
         {
             creatorText.text = string.Empty;
-        }
-
-        if (statsText != null)
-        {
-            statsText.text = string.Empty;
         }
     }
 

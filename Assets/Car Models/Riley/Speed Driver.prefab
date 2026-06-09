@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -1.61}
-  m_LocalScale: {x: 0.015, y: 0.015, z: 0.015}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5645359361749504572}
@@ -61,11 +61,19 @@ MonoBehaviour:
   highSpeedTurnMultiplier: 0.25
   minimumSteerSpeed: 0.05
   flippedThreshold: 0.1
-  flipRightingNudge: 0.5
+  twistRecoveryTorque: 75
+  twistRecoveryAngularDamping: 2.5
   groundCheckPadding: 0.15
   groundLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  airborneSpeedDecay: 8
+  airborneYawTorque: 25
+  airbornePitchTorque: 20
+  airborneRollTorque: 15
+  airborneAngularDamping: 0.35
+  takeoffSpinTransfer: 0.9
+  allowAirControl: 0
 --- !u!65 &8976129626140721037
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95,9 +103,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301678952128574392}
   serializedVersion: 5
-  m_Mass: 55
+  m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 55
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
