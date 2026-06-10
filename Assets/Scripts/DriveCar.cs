@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class DriveCar : MonoBehaviour
 {
+    public static event Action<DriveCar> FellOutOfBounds;
+
     [SerializeField] private float maxForwardSpeed = 8f;
     [SerializeField] private float maxReverseSpeed = 4f;
     [SerializeField] private float acceleration = 12f;
@@ -52,6 +55,9 @@ public class DriveCar : MonoBehaviour
     private float defaultAngularDamping;
     private bool wasGrounded;
     private float lastGroundYawRateDeg;
+    private bool isDrivable;
+    private Vector3 spawnPosition;
+    private Quaternion spawnRotation;
 
     void Awake()
     {
@@ -59,6 +65,9 @@ public class DriveCar : MonoBehaviour
         carRigidbody = GetComponent<Rigidbody>();
         carRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         defaultAngularDamping = carRigidbody.angularDamping;
+        isDrivable = true;
+        spawnPosition = transform.position;
+        spawnRotation = transform.rotation;
     }
 
     void Start()
@@ -76,7 +85,15 @@ public class DriveCar : MonoBehaviour
 
         if (transform.position.y < GlobalResetY)
         {
-            ReloadCurrentScene();
+            RespawnToSpawn();
+            FellOutOfBounds?.Invoke(this);
+            return;
+        }
+
+        if (!isDrivable)
+        {
+            throttleInput = 0f;
+            turnInput = 0f;
             return;
         }
 
@@ -107,6 +124,15 @@ public class DriveCar : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!isDrivable)
+        {
+            currentSpeed = 0f;
+            carRigidbody.linearVelocity = Vector3.zero;
+            carRigidbody.angularVelocity = Vector3.zero;
+            wasGrounded = TryGetGroundHit(out _);
+            return;
+        }
+
         bool isGrounded = TryGetGroundHit(out RaycastHit groundHit);
         bool justTookOff = !isGrounded && wasGrounded;
         bool justLanded = isGrounded && !wasGrounded;
@@ -255,5 +281,31 @@ public class DriveCar : MonoBehaviour
     private void ReloadCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void SetDrivable(bool value)
+    {
+        isDrivable = value;
+        if (!isDrivable)
+        {
+            throttleInput = 0f;
+            turnInput = 0f;
+            currentSpeed = 0f;
+            carRigidbody.linearVelocity = Vector3.zero;
+            carRigidbody.angularVelocity = Vector3.zero;
+        }
+    }
+
+    public void RespawnToSpawn()
+    {
+        throttleInput = 0f;
+        turnInput = 0f;
+        currentSpeed = 0f;
+        wasGrounded = false;
+        carRigidbody.linearVelocity = Vector3.zero;
+        carRigidbody.angularVelocity = Vector3.zero;
+        carRigidbody.position = spawnPosition;
+        carRigidbody.rotation = spawnRotation;
+        transform.SetPositionAndRotation(spawnPosition, spawnRotation);
     }
 }

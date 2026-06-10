@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.UI;
 
 public class CarSelectScreenController : MonoBehaviour
 {
@@ -13,6 +13,10 @@ public class CarSelectScreenController : MonoBehaviour
 
     [Header("Preview")]
     [SerializeField] private Transform previewAnchor;
+
+    [Header("Canvas State")]
+    [SerializeField] private Canvas carSelectCanvas;
+    [SerializeField] private Canvas racingCanvas;
 
     [Header("Selection Camera Orbit")]
     [SerializeField] private Transform cameraTransform;
@@ -35,14 +39,45 @@ public class CarSelectScreenController : MonoBehaviour
     [SerializeField] private CarCameraFollow gameplayCameraFollow;
     [SerializeField] private float startTransitionDuration = 1f;
 
+    [Header("Countdown")]
+    [SerializeField] private int countdownSeconds = 3;
+    [SerializeField] private TextMeshProUGUI countdownText;
+
+    [Header("Race Timer")]
+    [SerializeField] private MonoBehaviour raceLapTimerBehaviour;
+
     private int currentIndex;
     private GameObject previewInstance;
     private float orbitAngle;
     private bool gameStarted;
+    private bool raceTimerStarted;
     private Coroutine transitionRoutine;
+    private Coroutine countdownRoutine;
+
+    private void OnEnable()
+    {
+        DriveCar.FellOutOfBounds += HandleCarFellOutOfBounds;
+    }
+
+    private void OnDisable()
+    {
+        DriveCar.FellOutOfBounds -= HandleCarFellOutOfBounds;
+    }
 
     void Start()
     {
+        if (carSelectCanvas == null)
+        {
+            carSelectCanvas = GetComponentInParent<Canvas>();
+        }
+
+        UpdateCanvasState(false);
+
+        if (countdownText != null)
+        {
+            countdownText.gameObject.SetActive(false);
+        }
+
         if (cameraTransform == null && Camera.main != null)
         {
             cameraTransform = Camera.main.transform;
@@ -63,6 +98,8 @@ public class CarSelectScreenController : MonoBehaviour
             UpdateUiForNoCars();
             return;
         }
+
+        InvokeRaceTimerReset();
 
         currentIndex = WrapIndex(startingIndex, cars.Count);
         ShowCurrentCar();
@@ -106,16 +143,43 @@ public class CarSelectScreenController : MonoBehaviour
         }
 
         gameStarted = true;
+        raceTimerStarted = false;
+        UpdateCanvasState(true);
         CarDefinition currentCar = cars[currentIndex];
         CarSelectionRuntime.SetSelection(currentCar, currentIndex);
 
         SetDriveScriptsEnabled(previewInstance, true);
+        SetCarsDrivable(previewInstance, false);
+        StartOrRestartCountdown();
 
         if (transitionRoutine != null)
         {
             StopCoroutine(transitionRoutine);
         }
         transitionRoutine = StartCoroutine(TransitionToGameplayCamera());
+    }
+
+    private void UpdateCanvasState(bool isRacing)
+    {
+        if (carSelectCanvas != null)
+        {
+            carSelectCanvas.enabled = !isRacing;
+            GraphicRaycaster carSelectRaycaster = carSelectCanvas.GetComponent<GraphicRaycaster>();
+            if (carSelectRaycaster != null)
+            {
+                carSelectRaycaster.enabled = !isRacing;
+            }
+        }
+
+        if (racingCanvas != null)
+        {
+            racingCanvas.enabled = isRacing;
+            GraphicRaycaster racingRaycaster = racingCanvas.GetComponent<GraphicRaycaster>();
+            if (racingRaycaster != null)
+            {
+                racingRaycaster.enabled = isRacing;
+            }
+        }
     }
 
     private IEnumerator TransitionToGameplayCamera()
@@ -151,7 +215,6 @@ public class CarSelectScreenController : MonoBehaviour
         cameraTransform.position = targetPosition;
         cameraTransform.rotation = targetRotation;
         gameplayCameraFollow.enabled = true;
-        gameObject.SetActive(false);
     }
 
     private void UpdateSelectionCameraOrbit()
@@ -193,12 +256,101 @@ public class CarSelectScreenController : MonoBehaviour
         }
     }
 
+    private void SetCarsDrivable(GameObject carInstance, bool drivable)
+    {
+        if (carInstance == null)
+        {
+            return;
+        }
+
+        DriveCar[] drives = carInstance.GetComponentsInChildren<DriveCar>(true);
+        for (int i = 0; i < drives.Length; i++)
+        {
+            drives[i].SetDrivable(drivable);
+        }
+    }
+
+    private void StartOrRestartCountdown()
+    {
+        SetCarsDrivable(previewInstance, false);
+
+        if (countdownRoutine != null)
+        {
+            StopCoroutine(countdownRoutine);
+        }
+
+        countdownRoutine = StartCoroutine(CountdownAndEnableDrive());
+    }
+
+    private IEnumerator CountdownAndEnableDrive()
+    {
+        int count = Mathf.Max(1, countdownSeconds);
+
+        if (countdownText != null)
+        {
+            countdownText.gameObject.SetActive(true);
+        }
+
+        for (int value = count; value >= 1; value--)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = value.ToString();
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        if (countdownText != null)
+        {
+            countdownText.text = "GO!";
+        }
+
+        SetCarsDrivable(previewInstance, true);
+
+        if (!raceTimerStarted)
+        {
+            InvokeRaceTimerBegin(previewInstance);
+            raceTimerStarted = true;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (countdownText != null)
+        {
+            countdownText.gameObject.SetActive(false);
+        }
+
+        countdownRoutine = null;
+    }
+
+    private void HandleCarFellOutOfBounds(DriveCar driveCar)
+    {
+        if (!gameStarted || driveCar == null || previewInstance == null)
+        {
+            return;
+        }
+
+        if (!driveCar.transform.IsChildOf(previewInstance.transform))
+        {
+            return;
+        }
+
+        StartOrRestartCountdown();
+    }
+
     private void OnDestroy()
     {
         if (transitionRoutine != null)
         {
             StopCoroutine(transitionRoutine);
             transitionRoutine = null;
+        }
+
+        if (countdownRoutine != null)
+        {
+            StopCoroutine(countdownRoutine);
+            countdownRoutine = null;
         }
     }
 
@@ -295,5 +447,25 @@ public class CarSelectScreenController : MonoBehaviour
 
         int wrapped = value % count;
         return wrapped < 0 ? wrapped + count : wrapped;
+    }
+
+    private void InvokeRaceTimerReset()
+    {
+        if (raceLapTimerBehaviour == null)
+        {
+            return;
+        }
+
+        raceLapTimerBehaviour.Invoke("ResetRace", 0f);
+    }
+
+    private void InvokeRaceTimerBegin(GameObject playerCarRoot)
+    {
+        if (raceLapTimerBehaviour == null)
+        {
+            return;
+        }
+
+        raceLapTimerBehaviour.SendMessage("BeginRace", playerCarRoot, SendMessageOptions.DontRequireReceiver);
     }
 }
