@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class RaceLapTimer : MonoBehaviour, IRaceLapTimer
+public class RaceLapTimer : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI lapTimerText;
