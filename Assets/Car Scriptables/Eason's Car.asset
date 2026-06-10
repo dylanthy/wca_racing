@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd5c22ad268944c6f92dce58b4deca75, type: 3}
-  m_Name: Tron Bike
+  m_Name: Eason's Car
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
-  carName: Tron Bike
-  creator: Ryan B.
+  carName: Car
+  creator: Eason W.
   previewPrefab: {fileID: 6050745500348086564, guid: 92c2ea845f6c0854eb3e000716b8f1a3, type: 3}
   driveStats:
-    maxForwardSpeed: 55
+    maxForwardSpeed: 0
     maxReverseSpeed: 10
     acceleration: 20
     friction: 1
