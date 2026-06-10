@@ -2163,10 +2163,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 649a5cf8ac07204488db7060d9d8d741, type: 2}
   - {fileID: 11400000, guid: 036159e0b28520e49af5465e797b2472, type: 2}
   - {fileID: 11400000, guid: efd0ae902dfd3f54e8b24f6bc56287ac, type: 2}
+  - {fileID: 11400000, guid: f82c42c6027cc194bba86508b46e58be, type: 2}
   startingIndex: 0
   previewAnchor: {fileID: 700035048}
-  carSelectCanvas: {fileID: 1755957828}
-  racingCanvas: {fileID: 1438513898}
+  carSelectCanvas: {fileID: 0}
+  racingCanvas: {fileID: 0}
   cameraTransform: {fileID: 631602929}
   orbitRadius: 2.53
   orbitHeight: 1.19
@@ -2183,8 +2184,8 @@ MonoBehaviour:
   gameplayCameraFollow: {fileID: 631602925}
   startTransitionDuration: 1
   countdownSeconds: 3
-  countdownText: {fileID: 1508932956}
-  raceLapTimer: {fileID: 0}
+  countdownText: {fileID: 0}
+  raceLapTimerBehaviour: {fileID: 0}
 --- !u!1 &1273231615
 GameObject:
   m_ObjectHideFlags: 0
