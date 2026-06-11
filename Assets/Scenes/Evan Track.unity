@@ -879,6 +879,74 @@ RectTransform:
   m_AnchoredPosition: {x: 15, y: -113}
   m_SizeDelta: {x: 600.514, y: 51}
   m_Pivot: {x: 0, y: 1}
+--- !u!1 &230396686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 230396687}
+  - component: {fileID: 230396689}
+  - component: {fileID: 230396688}
+  m_Layer: 0
+  m_Name: mid collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &230396687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230396686}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.53922695, z: -0, w: 0.84216046}
+  m_LocalPosition: {x: 2.6283112, y: 7.1, z: -1.5141563}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1309293338}
+  m_LocalEulerAnglesHint: {x: 0, y: 65.262, z: 0}
+--- !u!114 &230396688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230396686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca2dd7d0cb7e4600aa5ec6dfaa3c6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FinishLineTrigger
+  gateType: 0
+  raceLapTimer: {fileID: 1827245000}
+--- !u!65 &230396689
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230396686}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 25.306498, y: 24.266895, z: 1}
+  m_Center: {x: -9.924968, y: -1.2732697, z: 0}
 --- !u!1 &238956110
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,6 +3245,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6f7f6cd5688c3c84893e7eeffdc47304, type: 2}
   - {fileID: 11400000, guid: 649a5cf8ac07204488db7060d9d8d741, type: 2}
   startingIndex: 0
+  skyboxes: []
   previewAnchor: {fileID: 700035048}
   carSelectCanvas: {fileID: 1755957828}
   racingCanvas: {fileID: 1438513898}
@@ -3367,6 +3436,7 @@ Transform:
   - {fileID: 700035048}
   - {fileID: 1170690389}
   - {fileID: 1455689299}
+  - {fileID: 230396687}
   - {fileID: 1827245001}
   - {fileID: 423181312}
   m_Father: {fileID: 0}
@@ -3508,6 +3578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca2dd7d0cb7e4600aa5ec6dfaa3c6b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinishLineTrigger
+  gateType: 1
   raceLapTimer: {fileID: 1827245000}
 --- !u!65 &1455689298
 BoxCollider:
