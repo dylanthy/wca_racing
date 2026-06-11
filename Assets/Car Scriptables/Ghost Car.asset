@@ -17,7 +17,7 @@ MonoBehaviour:
   previewPrefab: {fileID: 3070896684218725091, guid: e1a357a1e417efc4d94605b88276c3a5, type: 3}
   driveStats:
     maxForwardSpeed: 50
-    maxReverseSpeed: 500
+    maxReverseSpeed: 50
     acceleration: 100
     friction: 50
     turnSpeed: 60

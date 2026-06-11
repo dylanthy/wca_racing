@@ -1,22 +1,21 @@
 using UnityEngine;
-using UnityEngine.InputSystem;    // Correct casing for New Input System
-using UnityEngine.SceneManagement; // Needed for SceneManager
+using UnityEngine.SceneManagement;
 
 public class reset : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene(currentSceneName);
+            // R: reload scene, best time is KEPT
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Escape: reload scene, best time is KEPT
+            // If you want Escape to wipe the record instead, call RaceSessionData.Clear() here
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

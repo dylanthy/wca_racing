@@ -121,6 +121,26 @@ public class CarSelectScreenController : MonoBehaviour
         if (!gameStarted)
         {
             UpdateSelectionCameraOrbit();
+            HandleCarSelectInput();
+        }
+    }
+
+    private void HandleCarSelectInput()
+    {
+        if (cars.Count == 0) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
+            SelectPreviousCar();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        {
+            SelectNextCar();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
+        {
+            StartGame();
         }
     }
 
@@ -352,12 +372,18 @@ public class CarSelectScreenController : MonoBehaviour
             return;
         }
 
+        if (raceLapTimer != null)
+        {
+            raceLapTimer.ResetRace();
+        }
+
         if (gameStartAudioSource != null)
         {
             gameStartAudioSource.Stop();
             gameStartAudioSource.Play();
         }
 
+        raceTimerStarted = false;
         StartOrRestartCountdown();
     }
 
@@ -391,11 +417,11 @@ public class CarSelectScreenController : MonoBehaviour
     private void UpdateUi(CarDefinition car)
     {
         carNameText.text = car != null ? car.carName : "No Car";
-        creatorText.text = car != null ? "Creator: " + car.creator : string.Empty;
-        speedText.text = car != null ? "Top Speed: " + car.driveStats.maxForwardSpeed.ToString("0.0") : string.Empty;
-        handlingText.text = car != null ? "Handling: "+car.driveStats.turnMagnitude.ToString("0.0") : string.Empty;
-        driftText.text = car != null ? "Drifting: "+car.driveStats.highSpeedTurnMultiplier.ToString("0.0") : string.Empty;
-        frictionText.text = car != null ? "Friction: "+car.driveStats.friction.ToString("0.0") : string.Empty;
+        creatorText.text = car != null ? "By: " + car.creator : string.Empty;
+        speedText.text = car != null ? "Top Speed: " + car.driveStats.maxForwardSpeed: string.Empty;
+        handlingText.text = car != null ? "Handling: "+car.driveStats.turnMagnitude: string.Empty;
+        driftText.text = car != null ? "Acceleration: "+car.driveStats.acceleration: string.Empty;
+        frictionText.text = car != null ? "Friction: "+car.driveStats.friction: string.Empty;
     }
 
     private string BuildStatsText(CarDefinition car)

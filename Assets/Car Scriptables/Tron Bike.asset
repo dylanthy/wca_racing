@@ -16,12 +16,12 @@ MonoBehaviour:
   creator: Ryan B.
   previewPrefab: {fileID: 6050745500348086564, guid: 92c2ea845f6c0854eb3e000716b8f1a3, type: 3}
   driveStats:
-    maxForwardSpeed: 55
-    maxReverseSpeed: 10
-    acceleration: 20
-    friction: 1
-    turnSpeed: 40
-    turnMagnitude: 3
-    highSpeedTurnMultiplier: 0.25
+    maxForwardSpeed: 90
+    maxReverseSpeed: 30
+    acceleration: 14
+    friction: 0
+    turnSpeed: 30
+    turnMagnitude: 10
+    highSpeedTurnMultiplier: 0.38
     minimumSteerSpeed: 0.05
   customStats: []
