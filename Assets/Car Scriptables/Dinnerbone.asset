@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dinnerbone
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
   carName: Dinnerbone
-  creator: David
+  creator: David K.
   previewPrefab: {fileID: 1931564820826845128, guid: 492885c1b1c09c441a63f1c5c9bbc245, type: 3}
   driveStats:
     maxForwardSpeed: 40

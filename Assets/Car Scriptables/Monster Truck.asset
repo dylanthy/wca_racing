@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Monster Truck
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
   carName: Monster Truck
-  creator: Joshua Ejemai
+  creator: Joshua E.
   previewPrefab: {fileID: 5012039917230235959, guid: be0a92c22709cdc4f9b44b4297e6cd2e, type: 3}
   driveStats:
     maxForwardSpeed: 75

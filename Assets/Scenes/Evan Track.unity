@@ -2848,8 +2848,8 @@ MonoBehaviour:
   startTransitionDuration: 1
   countdownSeconds: 3
   countdownText: {fileID: 1508932956}
-  raceLapTimer: {fileID: 1827245000}
-  gameStartAudioSource: {fileID: 423181311}
+  raceLapTimer: {fileID: 0}
+  gameStartAudioSource: {fileID: 0}
 --- !u!1 &1273231615
 GameObject:
   m_ObjectHideFlags: 0

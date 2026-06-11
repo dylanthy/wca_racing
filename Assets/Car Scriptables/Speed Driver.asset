@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Speed Driver
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
   carName: Speed Driver
-  creator: Riley
+  creator: Riley Y.
   previewPrefab: {fileID: 301678952128574392, guid: 89f9314a226c1ca459e14c98f5817c24, type: 3}
   driveStats:
     maxForwardSpeed: 950

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Franklin Mobile V2
   m_EditorClassIdentifier: Assembly-CSharp::CarDefinition
   carName: Franklin-Mobile
-  creator: Franklin
+  creator: Franklin T.
   previewPrefab: {fileID: 7975942078451805577, guid: 94d96eef3ab538a48aa25de465573967, type: 3}
   driveStats:
     maxForwardSpeed: 76
