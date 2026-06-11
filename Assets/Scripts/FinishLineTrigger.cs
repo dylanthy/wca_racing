@@ -7,11 +7,6 @@ public class FinishLineTrigger : MonoBehaviour
 
     void Awake()
     {
-        if (raceLapTimer == null)
-        {
-            raceLapTimer = FindFirstObjectByType<RaceLapTimer>();
-        }
-
         Collider triggerCollider = GetComponent<Collider>();
         if (triggerCollider != null)
         {

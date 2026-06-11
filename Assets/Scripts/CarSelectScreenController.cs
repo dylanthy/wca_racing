@@ -44,7 +44,7 @@ public class CarSelectScreenController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countdownText;
 
     [Header("Race Timer")]
-    [SerializeField] private MonoBehaviour raceLapTimerBehaviour;
+    [SerializeField] private RaceLapTimer raceLapTimer;
 
     private int currentIndex;
     private GameObject previewInstance;
@@ -99,7 +99,15 @@ public class CarSelectScreenController : MonoBehaviour
             return;
         }
 
-        InvokeRaceTimerReset();
+        if (raceLapTimer == null)
+        {
+            raceLapTimer = FindAnyObjectByType<RaceLapTimer>();
+        }
+
+        if (raceLapTimer != null)
+        {
+            raceLapTimer.ResetRace();
+        }
 
         currentIndex = WrapIndex(startingIndex, cars.Count);
         ShowCurrentCar();
@@ -308,9 +316,9 @@ public class CarSelectScreenController : MonoBehaviour
 
         SetCarsDrivable(previewInstance, true);
 
-        if (!raceTimerStarted)
+        if (!raceTimerStarted && raceLapTimer != null)
         {
-            InvokeRaceTimerBegin(previewInstance);
+            raceLapTimer.BeginRace(previewInstance);
             raceTimerStarted = true;
         }
 
@@ -449,23 +457,4 @@ public class CarSelectScreenController : MonoBehaviour
         return wrapped < 0 ? wrapped + count : wrapped;
     }
 
-    private void InvokeRaceTimerReset()
-    {
-        if (raceLapTimerBehaviour == null)
-        {
-            return;
-        }
-
-        raceLapTimerBehaviour.Invoke("ResetRace", 0f);
-    }
-
-    private void InvokeRaceTimerBegin(GameObject playerCarRoot)
-    {
-        if (raceLapTimerBehaviour == null)
-        {
-            return;
-        }
-
-        raceLapTimerBehaviour.SendMessage("BeginRace", playerCarRoot, SendMessageOptions.DontRequireReceiver);
-    }
 }

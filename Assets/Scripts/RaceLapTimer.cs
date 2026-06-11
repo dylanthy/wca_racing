@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class RaceLapTimer : MonoBehaviour, IRaceLapTimer
+public class RaceLapTimer : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI lapTimerText;
@@ -18,6 +18,7 @@ public class RaceLapTimer : MonoBehaviour, IRaceLapTimer
     private int completedLaps;
     private float lastFinishTriggerTime = -999f;
     private DriveCar[] trackedDrives = new DriveCar[0];
+    public float lapElapsed;
 
     void Awake()
     {
@@ -31,7 +32,7 @@ public class RaceLapTimer : MonoBehaviour, IRaceLapTimer
             return;
         }
 
-        float lapElapsed = Time.time - lapStartTime;
+        lapElapsed = Time.time - lapStartTime;
         UpdateDisplay(lapElapsed);
     }
 
@@ -96,10 +97,6 @@ public class RaceLapTimer : MonoBehaviour, IRaceLapTimer
 
     private void UpdateDisplay(float lapSeconds)
     {
-        if (lapTimerText == null)
-        {
-            return;
-        }
 
         lapSeconds = Mathf.Max(0f, lapSeconds);
         int totalCentiseconds = Mathf.FloorToInt(lapSeconds * 100f);
