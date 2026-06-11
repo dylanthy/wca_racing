@@ -22,6 +22,6 @@ MonoBehaviour:
     friction: 5
     turnSpeed: 30
     turnMagnitude: 3
-    highSpeedTurnMultiplier: 0.099
+    highSpeedTurnMultiplier: 0.438
     minimumSteerSpeed: 0.3
   customStats: []

@@ -41,7 +41,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Ambient_Occlusion: 0.347
+    - _Ambient_Occlusion: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _CastShadows: 1
@@ -51,20 +51,20 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _KerbBorderSize: 0.319
-    - _Kerbs: 0.7
+    - _Kerbs: 0.064
     - _KerbsOffset: -0.72
-    - _LineCount: 1
-    - _LineLength: 0.518
+    - _LineCount: 0.326
+    - _LineLength: 0.574
     - _LineOffset: 80.9
     - _LineOpacity: 1
-    - _LineWidth: 0.0576
+    - _LineWidth: 0.0099
     - _Metallic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RoadNoise: 40.86
+    - _RoadNoise: 26.1
     - _RoadNoiseFactor: 1
-    - _Smoothness: 1
+    - _Smoothness: 0.426
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
@@ -73,9 +73,9 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _KerbColor: {r: 1, g: 0.19266054, b: 0, a: 1}
+    - _KerbColor: {r: 1, g: 0, b: 0.009691358, a: 1}
     - _LineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RoadColor: {r: 0.087169774, g: 0.09932875, b: 0.12452827, a: 1}
+    - _RoadColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
     - _WhiteKerbColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
