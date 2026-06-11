@@ -41,28 +41,28 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Ambient_Occlusion: 1
+    - _Ambient_Occlusion: 0.347
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _CastShadows: 1
     - _Cull: 0
-    - _Dirth: -0.325
-    - _DirthSize: 2154
+    - _Dirth: -0.179
+    - _DirthSize: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _KerbBorderSize: 0.319
     - _Kerbs: 0.7
-    - _KerbsOffset: 0
-    - _LineCount: 0.5
-    - _LineLength: 0.656
-    - _LineOffset: 0
+    - _KerbsOffset: -0.72
+    - _LineCount: 1
+    - _LineLength: 0.518
+    - _LineOffset: 80.9
     - _LineOpacity: 1
-    - _LineWidth: 0.0087
+    - _LineWidth: 0.0576
     - _Metallic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RoadNoise: 0
+    - _RoadNoise: 40.86
     - _RoadNoiseFactor: 1
     - _Smoothness: 1
     - _SrcBlend: 1

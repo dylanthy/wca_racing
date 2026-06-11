@@ -46,6 +46,9 @@ public class CarSelectScreenController : MonoBehaviour
     [Header("Race Timer")]
     [SerializeField] private RaceLapTimer raceLapTimer;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource gameStartAudioSource;
+
     private int currentIndex;
     private GameObject previewInstance;
     private float orbitAngle;
@@ -156,10 +159,15 @@ public class CarSelectScreenController : MonoBehaviour
         CarDefinition currentCar = cars[currentIndex];
         CarSelectionRuntime.SetSelection(currentCar, currentIndex);
 
+        if (gameStartAudioSource != null)
+        {
+            gameStartAudioSource.Play();
+        }
+
         SetDriveScriptsEnabled(previewInstance, true);
         SetCarsDrivable(previewInstance, false);
         StartOrRestartCountdown();
-
+        
         if (transitionRoutine != null)
         {
             StopCoroutine(transitionRoutine);
@@ -342,6 +350,12 @@ public class CarSelectScreenController : MonoBehaviour
         if (!driveCar.transform.IsChildOf(previewInstance.transform))
         {
             return;
+        }
+
+        if (gameStartAudioSource != null)
+        {
+            gameStartAudioSource.Stop();
+            gameStartAudioSource.Play();
         }
 
         StartOrRestartCountdown();
