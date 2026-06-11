@@ -3,6 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class FinishLineTrigger : MonoBehaviour
 {
+    private enum GateType
+    {
+        Mid,
+        Finish
+    }
+
+    [SerializeField] private GateType gateType = GateType.Finish;
     [SerializeField] private RaceLapTimer raceLapTimer;
 
     void Awake()
@@ -27,6 +34,13 @@ public class FinishLineTrigger : MonoBehaviour
             return;
         }
 
-        raceLapTimer.NotifyFinishCrossed(driveCar);
+        if (gateType == GateType.Mid)
+        {
+            raceLapTimer.NotifyMidCrossed(driveCar);
+        }
+        else
+        {
+            raceLapTimer.NotifyFinishCrossed(driveCar);
+        }
     }
 }

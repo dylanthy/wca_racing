@@ -11,6 +11,9 @@ public class CarSelectScreenController : MonoBehaviour
     [SerializeField] private List<CarDefinition> cars = new List<CarDefinition>();
     [SerializeField] private int startingIndex;
 
+    [Header("Skyboxes")]
+    [SerializeField] private List<Material> skyboxes = new List<Material>();
+
     [Header("Preview")]
     [SerializeField] private Transform previewAnchor;
 
@@ -54,6 +57,7 @@ public class CarSelectScreenController : MonoBehaviour
     private float orbitAngle;
     private bool gameStarted;
     private bool raceTimerStarted;
+    private int currentSkyboxIndex;
     private Coroutine transitionRoutine;
     private Coroutine countdownRoutine;
 
@@ -96,6 +100,8 @@ public class CarSelectScreenController : MonoBehaviour
             gameplayCameraFollow.enabled = false;
         }
 
+        ApplySkyboxByIndex(0);
+
         if (cars.Count == 0)
         {
             UpdateUiForNoCars();
@@ -127,6 +133,23 @@ public class CarSelectScreenController : MonoBehaviour
 
     private void HandleCarSelectInput()
     {
+        bool shiftHeld = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
+        if (shiftHeld)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            {
+                SelectPreviousSkybox();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            {
+                SelectNextSkybox();
+                return;
+            }
+        }
+
         if (cars.Count == 0) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
@@ -193,6 +216,44 @@ public class CarSelectScreenController : MonoBehaviour
             StopCoroutine(transitionRoutine);
         }
         transitionRoutine = StartCoroutine(TransitionToGameplayCamera());
+    }
+
+    public void SelectNextSkybox()
+    {
+        if (skyboxes.Count == 0)
+        {
+            return;
+        }
+
+        ApplySkyboxByIndex(currentSkyboxIndex + 1);
+    }
+
+    public void SelectPreviousSkybox()
+    {
+        if (skyboxes.Count == 0)
+        {
+            return;
+        }
+
+        ApplySkyboxByIndex(currentSkyboxIndex - 1);
+    }
+
+    private void ApplySkyboxByIndex(int index)
+    {
+        if (skyboxes.Count == 0)
+        {
+            return;
+        }
+
+        currentSkyboxIndex = WrapIndex(index, skyboxes.Count);
+        Material skyboxMaterial = skyboxes[currentSkyboxIndex];
+        if (skyboxMaterial == null)
+        {
+            return;
+        }
+
+        RenderSettings.skybox = skyboxMaterial;
+        DynamicGI.UpdateEnvironment();
     }
 
     private void UpdateCanvasState(bool isRacing)

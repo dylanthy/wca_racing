@@ -28,6 +28,7 @@ public class RaceLapTimer : MonoBehaviour
     private int completedLaps;
     private float lastFinishTriggerTime = -999f;
     private DriveCar[] trackedDrives = new DriveCar[0];
+    private bool hasCrossedMidGateThisLap;
     public float lapElapsed;
 
     private float bestLapTime = float.MaxValue;
@@ -69,6 +70,7 @@ public class RaceLapTimer : MonoBehaviour
         completedLaps = 0;
         lastFinishTriggerTime = -999f;
         lapStartTime = Time.time;
+        hasCrossedMidGateThisLap = false;
         raceStarted = true;
         UpdateDisplay(0f);
     }
@@ -79,8 +81,24 @@ public class RaceLapTimer : MonoBehaviour
         completedLaps = 0;
         lastFinishTriggerTime = -999f;
         trackedDrives = new DriveCar[0];
+        hasCrossedMidGateThisLap = false;
         lapElapsed = 0f;
         UpdateDisplay(0f);
+    }
+
+    public void NotifyMidCrossed(DriveCar driveCar)
+    {
+        if (!raceStarted || driveCar == null)
+        {
+            return;
+        }
+
+        if (!IsTrackedDriveCar(driveCar))
+        {
+            return;
+        }
+
+        hasCrossedMidGateThisLap = true;
     }
 
     public void NotifyFinishCrossed(DriveCar driveCar)
@@ -95,6 +113,11 @@ public class RaceLapTimer : MonoBehaviour
             return;
         }
 
+        if (!hasCrossedMidGateThisLap)
+        {
+            return;
+        }
+
         if (Time.time - lastFinishTriggerTime < Mathf.Max(0.05f, finishTriggerCooldown))
         {
             return;
@@ -105,6 +128,7 @@ public class RaceLapTimer : MonoBehaviour
         completedLaps++;
         lastFinishTriggerTime = Time.time;
         lapStartTime = Time.time;
+        hasCrossedMidGateThisLap = false;
         UpdateDisplay(0f);
 
         CheckAndUpdateBestTime(finishedLapTime);
